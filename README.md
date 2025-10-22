@@ -10,60 +10,74 @@ PC installed with SCILAB.
 
 ## PROGRAM (LPF): 
 ```python
-clc ; 
-close ; 
-wp=input('Enter the pass band frequency (Radians )= ' ); 
-ws=input('Enter the stop band frequency (Radians )= ' ); 
-alphap=input( ' Enter the pass band attenuation (dB)=' ); 
-alphas=input( ' Enter the stop band attenuation(dB)=' ); 
-T=input('Enter the Value of sampling Time='); 
- 
-//Pre warping- Bilinear Transformation 
-omegap=(2/T)*tan(wp/2); 
-disp(omegap,'omegap='); 
-omegas=(2/T)*tan(ws/2); 
-disp(omegas,'omegas='); 
- 
-//Order of the filter 
- 
-N=log10(((10^(0.1*alphas))-1)/((10^(0.1*alphap))-1))/(2*log10(omegas/omegap)); 
-disp(N,'N='); 
-13 
- 
-N=ceil(N); 
- 
-disp(N,'Round off value of N='); 
- 
- 
-//Cut off frequency 
-omegac=omegap/(((10^(0.1*alphap)) -1)^(1/(2* N))); 
-disp(omegac,'omegac='); 
- 
-disp('Normalised Analog LPF Transfer function H(S)='); 
-hs_Normalised = analpf(N,'butt',[0,0],1); 
-disp(hs_Normalised); 
- 
-disp('Analog LPF Transfer function H(S)='); 
-hs= analpf(N,'butt',[0,0],omegac); 
-disp(hs); 
- 
- 
-z=poly(0,'z');//Defining variable z 
- 
-Hz=horner(hs,(2/ T)*((z -1)/(z+1)))// Bilinear Transformation 
-disp('Digital LPF Transfer function H(Z)='); 
-disp(Hz); 
- 
- 
-HW=frmag(Hz,512); // Frequency response 
-w=0:%pi/511:%pi ; 
-plot(w/%pi,abs(HW)); 
- 
-xlabel(' Normalized Digital Frequency w'); 
-ylabel('Magnitude '); 
+clc;
+clear;
+close;
 
- 
-title(' Frequency Response of Butterworth IIR LPF'); 
+// User Inputs
+wp = input('Enter the pass band frequency (Radians )= ');
+ws = input('Enter the stop band frequency (Radians )= ');
+alphap = input('Enter the pass band attenuation (dB)= ');
+alphas = input('Enter the stop band attenuation (dB)= ');
+T = input('Enter the Value of sampling Time= ');
+
+// -------------------------
+// Prewarping
+// -------------------------
+omegap = (2/T)*tan(wp/2);
+mprintf("\nomegap = %f\n", omegap);
+
+omegas = (2/T)*tan(ws/2);
+mprintf("omegas = %f\n", omegas);
+
+// -------------------------
+// Order of Filter
+// -------------------------
+N = log10(((10^(0.1*alphas))-1) / ((10^(0.1*alphap))-1)) / (2*log10(omegas/omegap));
+mprintf("N = %f\n", N);
+
+N = ceil(N);
+mprintf("Round off value of N = %d\n", N);
+
+// -------------------------
+// Cutoff Frequency
+// -------------------------
+omegac = omegap / (((10^(0.1*alphap)) - 1)^(1/(2*N)));
+mprintf("omegac = %f\n", omegac);
+
+// -------------------------
+// Normalised Analog LPF Transfer Function
+// -------------------------
+mprintf("\nNormalised Analog LPF Transfer function H(S)=\n");
+hs_Normalised = analpf(N, 'butt', [0,0], 1);
+disp(hs_Normalised);
+
+// -------------------------
+// Actual Analog LPF
+// -------------------------
+mprintf("\nAnalog LPF Transfer function H(S)=\n");
+hs_LPF = analpf(N, 'butt', [0,0], omegac);
+disp(hs_LPF);
+
+// -------------------------
+// Digital LPF (Bilinear Transform)
+// -------------------------
+z = poly(0,'z');
+Hz_LPF = horner(hs_LPF, (2/T)*((z-1)/(z+1))); 
+mprintf("\nDigital LPF Transfer function H(Z)=\n");
+disp(Hz_LPF);
+
+// -------------------------
+// Frequency Response (with grid)
+// -------------------------
+HW_LPF = frmag(Hz_LPF, 512);
+w = 0:%pi/511:%pi;
+
+plot(w/%pi, abs(HW_LPF),style=2);
+xlabel(' Normalized Frequency (w/π)');
+ylabel('Magnitude');
+title('Frequency Response of Butterworth IIR LPF');
+xgrid();
 ```
 
 
@@ -73,61 +87,70 @@ clc;
 clear;
 close;
 
-// User inputs
+// User Inputs
 wp = input('Enter the pass band frequency (Radians )= ');
 ws = input('Enter the stop band frequency (Radians )= ');
 alphap = input('Enter the pass band attenuation (dB)= ');
 alphas = input('Enter the stop band attenuation (dB)= ');
-T = input('Enter the Value of sampling Time=');
+T = input('Enter the Value of sampling Time= ');
 
-// Pre-warping
+// -------------------------
+// Prewarping
+// -------------------------
 omegap = (2/T)*tan(wp/2);
-disp(omegap, 'omegap=');
+mprintf("\nomegap = %f\n", omegap);
+
 omegas = (2/T)*tan(ws/2);
-disp(omegas, 'omegas=');
+mprintf("omegas = %f\n", omegas);
 
-// Order of the filter
-N = log10(((10^(0.1*alphas))-1)/((10^(0.1*alphap))-1))/(2*log10(omegap/omegas));
-disp(N, 'N=');
+// -------------------------
+// Order of Filter
+// -------------------------
+N = log10(((10^(0.1*alphas))-1) / ((10^(0.1*alphap))-1)) / (2*log10(omegap/omegas));
+mprintf("N = %f\n", N);
+
 N = ceil(N);
-disp(N, 'Round off value of N=');
+mprintf("Round off value of N = %d\n", N);
 
-// Cutoff frequency (for high-pass, based on stopband ratio)
-omegac = omegas/(((10^(0.1*alphas)) -1)^(1/(2* N)));
-disp(omegac, 'omegac=');
+// -------------------------
+// Cutoff Frequency
+// -------------------------
+omegac = omegap / (((10^(0.1*alphap)) - 1)^(1/(2*N)));
+mprintf("omegac = %f\n", omegac);
 
-// Normalized Analog LPF
-disp('Normalized Analog LPF Transfer function H(s)=');
-hs_Normalised = analpf(N,'butt',[0,0],1);
+// -------------------------
+// Normalised Analog LPF Prototype
+// -------------------------
+mprintf("\nNormalised Analog LPF Transfer function H(S)=\n");
+hs_Normalised = analpf(N, 'butt', [0,0], 1);
 disp(hs_Normalised);
 
-// Actual Analog LPF
-disp('Analog LPF Transfer function H(s)=');
-hs = analpf(N,'butt',[0,0],omegac);
-disp(hs);
-
-// ---------- LPF to HPF Transformation ----------
+// -------------------------
+// Analog HPF (LPF → HPF transformation)
+// -------------------------
 s = poly(0,'s');
-hs_hp = horner(hs, (omegac^2)/s);   // low-pass → high-pass transform
+hs_HPF = horner(hs_Normalised, omegac/s);
+mprintf("\nAnalog HPF Transfer function H(S)=\n");
+disp(hs_HPF);
 
-disp('Analog HPF Transfer function H(s)=');
-disp(hs_hp);
-
-// ---------- Bilinear Transformation ----------
+// -------------------------
+// Digital HPF (Bilinear Transform)
+// -------------------------
 z = poly(0,'z');
-Hz = horner(hs_hp, (2/T)*((z - 1)/(z + 1)));
+Hz_HPF = horner(hs_HPF, (2/T)*((z-1)/(z+1))); 
+mprintf("\nDigital HPF Transfer function H(Z)=\n");
+disp(Hz_HPF);
 
-disp('Digital HPF Transfer function H(z)=');
-disp(Hz);
-
-// ---------- Frequency Response ----------
-HW = frmag(Hz,512);
+// -------------------------
+// Frequency Response (with grid)
+// -------------------------
+HW_HPF = frmag(Hz_HPF, 512);
 w = 0:%pi/511:%pi;
 
-plot(w/%pi, abs(HW));
-xlabel('Normalized Digital Frequency (×π rad/sample)');
+plot(w/%pi, abs(HW_HPF));
+xlabel(' Normalized Frequency (w/π)');
 ylabel('Magnitude');
-title('Frequency Response of Butterworth IIR High-pass Filter');
+title('Frequency Response of Butterworth IIR HPF');
 xgrid();
 ```
 
