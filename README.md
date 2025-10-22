@@ -9,8 +9,7 @@ To design an IIR Butterworth filter  using SCILAB.
 PC installed with SCILAB. 
 
 ## PROGRAM (LPF): 
-```
-
+```python
 clc ; 
 close ; 
 wp=input('Enter the pass band frequency (Radians )= ' ); 
@@ -65,12 +64,11 @@ ylabel('Magnitude ');
 
  
 title(' Frequency Response of Butterworth IIR LPF'); 
-
 ```
 
 
 ## PROGRAM (HPF): 
-```
+```python
 clc;
 clear;
 close;
@@ -131,7 +129,6 @@ xlabel('Normalized Digital Frequency (×π rad/sample)');
 ylabel('Magnitude');
 title('Frequency Response of Butterworth IIR High-pass Filter');
 xgrid();
-
 ```
 
 
