@@ -3,8 +3,7 @@
 # REG NO : 212223060122
 
 ## AIM: 
-
- To design an IIR Butterworth filter  using SCILAB. 
+To design an IIR Butterworth filter  using SCILAB. 
 
 ## APPARATUS REQUIRED: 
 PC installed with SCILAB. 
