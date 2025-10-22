@@ -134,13 +134,13 @@ xgrid();
 
 ## OUTPUT (LPF) : 
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c95fbbf3-38be-4a82-90c4-4b624b17fef5" />
+<img width="1919" height="953" alt="image" src="https://github.com/user-attachments/assets/da421e37-d368-4fbe-9f1e-8a0383c296df" />
 
 <img width="1674" height="826" alt="image" src="https://github.com/user-attachments/assets/a04967cc-b476-481e-8388-078fbfdfbccf" />
 
 ## OUTPUT (HPF) : 
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f873820e-c32f-4ee5-9f22-2b016885280f" />
+<img width="1920" height="976" alt="Screenshot 2025-10-22 120123" src="https://github.com/user-attachments/assets/0e4f082d-b23c-435a-af89-6342fd3f93e2" />
 
 <img width="1650" height="818" alt="Screenshot 2025-10-22 120156" src="https://github.com/user-attachments/assets/6dc5e90f-0124-4051-a291-a9687977e9d2" />
 
